@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"fmt"
 	"encoding/hex"
 	"time"
@@ -15,8 +16,13 @@ func main() {
 		"iat": &jwt.NumericDate{Time: time.Now()},
 	})
 
+	val, err := ioutil.ReadFile("jwt_secret")
+	if err != nil {
+		panic("could not read jwt secret")
+	}
+
 	// Sign and get the complete encoded token as a string using the secret
-	secretHex := "5e6f246df54a2b48ca21cd56c7aeba4da5630de195797df9806ddba3e0b02ee9"
+	secretHex := string(val)
 	secret, err := hex.DecodeString(secretHex)
 	if err != nil {
 		panic(err)
